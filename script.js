@@ -15,7 +15,8 @@
 // listen for player click on reset button to reset board and rerun the game
 
 /*----- constants -----*/
-
+// differentiate between player turns
+// use values to update turn in renderMessage
 
 /*----- state variables -----*/
 let turn;
@@ -23,10 +24,12 @@ let board;
 let winner;
 
 /*----- cached elements  -----*/
-
+const turnMessage = document.querySelector('h1');
+const resetBtn = document.querySelector('button');
 
 /*----- event listeners -----*/
-
+// player click on pit triggers handlePlayerMove()
+// player click on reset button triggers initialize()
 
 /*----- functions -----*/
 initialize();
@@ -39,4 +42,13 @@ function initialize(){
     ];
     turn = 1;
     winner = null;
+    render();
 }
+
+//renderBoard()
+
+//renderMessage()
+
+//handlePlayerMove()
+
+//getWinner()
