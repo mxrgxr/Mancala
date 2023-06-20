@@ -1,4 +1,3 @@
-// each player starts with 4 tokens/slot (24/player)
 // when player clicks slot
     // 1. empty clicked slot
     // 2. loop move 1 space to right drop 1 token as long as last move was in slot with more tokens than 1
@@ -22,10 +21,6 @@
 let turn;
 let board;
 let winner;
-let player1Pits;
-let player2Pits;
-let player1Stores;
-let player2Stores;
 
 /*----- cached elements  -----*/
 
@@ -34,3 +29,14 @@ let player2Stores;
 
 
 /*----- functions -----*/
+initialize();
+
+function initialize(){
+    board = [
+        [4, 4, 4, 4, 4, 4], //player 1 pits
+        [4, 4, 4, 4, 4, 4], //player 2 pits
+        [0, 0]
+    ];
+    turn = 1;
+    winner = null;
+}
