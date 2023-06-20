@@ -50,5 +50,11 @@ function initialize(){
 //renderMessage()
 
 //handlePlayerMove()
+    //update clicked pit to 0
+    //+1 to each pit on right & player's store
+    //skip opponent store
+    //determine next move based on last pit filled
 
 //getWinner()
+    //count store values for each player
+    //player with > tokens collected wins
