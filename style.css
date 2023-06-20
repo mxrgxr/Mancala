@@ -1,3 +1,22 @@
 /* Style board so that there are:
     2 stores in oval shape (1 per player) on left and right of board
     12 slots (6 per player) in 2 rows on top and bottom in between store ovals */
+
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+header {
+    font-size: 10vw;
+}
+
+h1 {
+    font-size: 5vw;
+}
+
+button {
+    font-size: 2vw;
+    padding: 1vw 2vw;
+}
