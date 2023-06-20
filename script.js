@@ -14,3 +14,23 @@
         // 1b. player with > tokens wins
         // 1c. enable reset button functionality
 // listen for player click on reset button to reset board and rerun the game
+
+/*----- constants -----*/
+
+
+/*----- state variables -----*/
+let turn;
+let board;
+let winner;
+let player1Pits;
+let player2Pits;
+let player1Stores;
+let player2Stores;
+
+/*----- cached elements  -----*/
+
+
+/*----- event listeners -----*/
+
+
+/*----- functions -----*/
