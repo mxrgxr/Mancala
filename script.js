@@ -15,8 +15,11 @@
 // listen for player click on reset button to reset board and rerun the game
 
 /*----- constants -----*/
-// differentiate between player turns
-// use values to update turn in renderMessage
+const PLAYERS = {
+    '0': 'none',
+    '1': 'Player 1',
+    '-1': 'Player 2'
+}
 
 /*----- state variables -----*/
 let turn;
@@ -26,10 +29,19 @@ let winner;
 /*----- cached elements  -----*/
 const turnMessage = document.querySelector('h1');
 const resetBtn = document.querySelector('button');
+const player1Pits = Array.from(document.getElementById('player1').querySelectorAll('.pit'));
+const player2Pits = Array.from(document.getElementById('player2').querySelectorAll('.pit'));
+const player1Store = document.getElementById('player1-store');
+const player2Store = document.getElementById('player2-store');
 
 /*----- event listeners -----*/
-// player click on pit triggers handlePlayerMove()
-// player click on reset button triggers initialize()
+player1Pits.forEach(pit => {
+    pit.addEventListener('click', handlePlayerChoice);
+});
+player2Pits.forEach(pit => {
+    pit.addEventListener('click', handlePlayerChoice);
+});
+resetBtn.addEventListener('click', initialize);
 
 /*----- functions -----*/
 initialize();
@@ -38,23 +50,65 @@ function initialize(){
     board = [
         [4, 4, 4, 4, 4, 4], //player 1 pits
         [4, 4, 4, 4, 4, 4], //player 2 pits
-        [0, 0]
+        [0, 0] //player stores
     ];
     turn = 1;
     winner = null;
     render();
 }
 
-//renderBoard()
+function render(){
+    renderBoard();
+    renderMessage();
+}
 
-//renderMessage()
+function renderBoard(){
+    player1Pits.forEach((pit, i) => {
+        pit.innerHTML = board[0][i];
+    });
+    player2Pits.forEach((pit, i) => {
+        pit.innerHTML = board[1][i];
+    });
+    player1Store.innerHTML = board[2][0];
+    player2Store.innerHTML = board[2][1];
+}
 
-//handlePlayerMove()
-    //update clicked pit to 0
-    //+1 to each pit on right & player's store
-    //skip opponent store
-    //determine next move based on last pit filled
+function renderMessage(){
 
-//getWinner()
-    //count store values for each player
-    //player with > tokens collected wins
+}
+
+function handlePlayerChoice(event){
+    const selectedPit = event.target;
+    const player = selectedPit.getAttribute('data-player');
+    const pitIdx = selectedPit.getAttribute('data-pit');
+    board[player][pitIdx] = 0;
+    moveStones();
+    checkLastMove();
+    winner = getWinner();
+    render();
+}
+
+function moveStones(){
+    const playerPits = board[turn === 1 ? 0 : 1];
+    const currentPlayerStore = board[2][turn === 1 ? 0 : 1];
+
+    let movingStones = playerPits[pitIdx];
+    let currentPitIdx = pitIdx;
+
+    while (movingStones > 0) {
+        currentPitIdx = (currentPitIdx + 1) % playerPits.length;
+        if (currentPitIdx === (turn === 1 ? player2Store : player1Store)) {
+            currentPitIdx = (currentPitIdx + 1) % playerPits.length;
+        }
+        playerPits[currentPitIdx] += 1;
+        movingStones--;
+    }
+}
+
+function checkLastMove(){
+
+}
+
+function getWinner(){
+    
+}
