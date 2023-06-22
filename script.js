@@ -101,7 +101,7 @@ function renderMessage() {
 
 function isGameOver() {
   const storeStones = stores.map(store => parseInt(store.textContent));
-  return board.every(playerPits => playerPits.every(pit => pit === 0)) || storeStones.some(stones => stones > 24);
+  return storeStones.some(stones => stones > 24);
 }
 
 function endGame() {
