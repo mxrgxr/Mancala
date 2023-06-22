@@ -40,40 +40,54 @@ function render() {
 }
 
 async function handlePlayerChoice(event) {
+  // stops program from running if stone distribution in progress
   if (isAnimating) return;
+  // obtain data related to clicked pit
   const pit = event.target;
   const player = parseInt(pit.dataset.player);
   const pitIndex = parseInt(pit.dataset.pit);
-
+  // stops opponent from clicking during player's turn
   if (player !== currentPlayer) return;
-
+  // "pick up" stones and update board array
   let stonesInHand = board[player - 1][pitIndex];
   board[player - 1][pitIndex] = 0;
   renderBoard();
-
+  // initialize currentPit variable
   let currentPit = pitIndex;
   let extraTurn = false;
+  // stone distribution in progress
   isAnimating = true;
+  // while player has stones in hand continue
   while (stonesInHand > 0) {
     await new Promise(resolve => setTimeout(resolve, DELAY_MS));
+    // move to next pit
     currentPit = (currentPit + 1);
+    // check if store belongs to player otherwise
     if ((currentPit === NUM_PITS && player === 2) || (currentPit === NUM_PITS * 2 + 1 && player === 1)) {
+      // skip by adding one to currentPit
       currentPit = (currentPit + 1);
     }
-
+    // if current pit is player tore
     if (currentPit === NUM_PITS) {
-      const currentStoreIndex = player - 1;
+      // find index of current player's store
+      const currentStoreIndex = currentPlayer - 1;
+      // access and add stone to player store
       stores[currentStoreIndex].textContent = parseInt(stores[currentStoreIndex].textContent) + 1;
+      // decrease remaining stones to play
       stonesInHand--;
-
+      // check if player ran out of stones in own store to grant another turn
       if (stonesInHand === 0) {
         extraTurn = true;
       }
     } else {
+      // find row (0 or 1) by dividing current pit by 6 and rounding
       const currentRow = Math.floor(currentPit / NUM_PITS);
+      // if in row 1, pit index can be found by using remainder of currentPit/6 or
+      // if in row 2, subtract 1
       const currentPitIndex = currentRow === 0 ? currentPit % NUM_PITS : (currentPit % NUM_PITS) - 1;
-      console.log(currentRow)
+      // increase stones in current pit
       board[currentRow][currentPitIndex]++;
+      // decrease stones to play
       stonesInHand--;
       renderBoard();
     }
