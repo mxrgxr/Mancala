@@ -1,12 +1,13 @@
 // Constants
 const NUM_PITS = 6;
 const INITIAL_SEEDS = 4;
-const DELAY_MS = 1000;
+const DELAY_MS = 500;
 
 // State variables
 let currentPlayer;
 let board;
 let winner;
+let isAnimating;
 
 // Cached HTML elements
 const pits = document.querySelectorAll(".pit");
@@ -30,6 +31,7 @@ function initialize() {
     [0, 0], // BOTH PLAYER STORES ARE INITIALLY EMPTY
   ];
   stores.forEach(store => (store.innerHTML = "0"));
+  isAnimating = false;
   render();
 }
 
@@ -54,6 +56,7 @@ if (isAnimating) return;
   let extraTurn = false;
   isAnimating = true;
   while (stonesInHand > 0) {
+    await new Promise(resolve => setTimeout(resolve, DELAY_MS));
     currentPit = (currentPit + 1) % (2 * NUM_PITS);
     if (currentPit === NUM_PITS) {
       if (player === currentPlayer) {
@@ -105,7 +108,7 @@ function renderBoard() {
 }
 
 function renderMessage() {
-  turnIndicator.innerHTML = `Player ${currentPlayer}'s Turn`;
+  turnMsg.innerHTML = `Player ${currentPlayer}'s Turn`;
 }
 
 function isGameOver() {
@@ -122,5 +125,5 @@ function endGame() {
   } else {
     winner = "Tie";
   }
-  turnIndicator.innerHTML = `Game Over! ${winner === "Tie" ? "It's a Tie!" : "Player " + winner + " Wins!"}`;
+  turnMsg.innerHTML = `Game Over! ${winner === "Tie" ? "It's a Tie!" : "Player " + winner + " Wins!"}`;
 }
