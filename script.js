@@ -38,16 +38,20 @@ function render() {
   renderBoard();
   renderMessage();
 }
-
 async function handlePlayerChoice(event) {
+
   // stops program from running if stone distribution in progress
-  if (isAnimating) return;
+  if (isAnimating) {
+    return;
+  }
   // obtain data related to clicked pit
   const pit = event.target;
   const player = parseInt(pit.dataset.player);
   const pitIndex = parseInt(pit.dataset.pit);
   // stops opponent from clicking during player's turn
-  if (player !== currentPlayer) return;
+  if (player !== currentPlayer) {
+    return;
+  }
   // "pick up" stones and update board array
   let stonesInHand = board[player - 1][pitIndex];
   board[player - 1][pitIndex] = 0;
@@ -85,12 +89,14 @@ async function handlePlayerChoice(event) {
       // if in row 1, pit index can be found by using remainder of currentPit/6 or
       // if in row 2, subtract 1
       const currentPitIndex = currentRow === 0 ? currentPit % NUM_PITS : (currentPit % NUM_PITS) - 1;
+      console.log(event.target)
       // increase stones in current pit
       board[currentRow][currentPitIndex]++;
       // decrease stones to play
       stonesInHand--;
       renderBoard();
     }
+    isAnimating = false;
   }
 
   if (isGameOver()) {
