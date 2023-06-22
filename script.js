@@ -57,7 +57,7 @@ async function handlePlayerChoice(event) {
   while (stonesInHand > 0) {
     await new Promise(resolve => setTimeout(resolve, DELAY_MS));
     currentPit = (currentPit + 1);
-    if (currentPit === board && player !== currentPlayer) {
+    if ((currentPit === NUM_PITS && player === 2) || (currentPit === NUM_PITS * 2 + 1 && player === 1)) {
       currentPit = (currentPit + 1);
     }
 
