@@ -1,13 +1,13 @@
 // Constants
 const NUM_PITS = 6;
 const INITIAL_SEEDS = 4;
-const DELAY_MS = 500;
+const DELAY_MS = 1000;
 
 // State variables
 let currentPlayer;
 let board;
 let winner;
-let isAnimating;
+let isAnimating = false;
 
 // Cached HTML elements
 const pits = document.querySelectorAll(".pit");
@@ -30,8 +30,7 @@ function initialize() {
     [4, 4, 4, 4, 4, 4], // PLAYER 2 PITS
     [0, 0], // BOTH PLAYER STORES ARE INITIALLY EMPTY
   ];
-  stores.forEach(store => (store.innerHTML = "0"));
-  isAnimating = false;
+  stores.forEach(store => (store.textContent = "0"));
   render();
 }
 
@@ -41,10 +40,10 @@ function render() {
 }
 
 async function handlePlayerChoice(event) {
-if (isAnimating) return;
+  if (isAnimating) return;
   const pit = event.target;
   const player = parseInt(pit.dataset.player);
-  const pitIndex = parseInt(pit.dataset.pit) ;
+  const pitIndex = parseInt(pit.dataset.pit);
 
   if (player !== currentPlayer) return;
 
@@ -57,15 +56,20 @@ if (isAnimating) return;
   isAnimating = true;
   while (stonesInHand > 0) {
     await new Promise(resolve => setTimeout(resolve, DELAY_MS));
-    currentPit = (currentPit + 1) % (2 * NUM_PITS);
+    currentPit = (currentPit + 1) % (2 * NUM_PITS + 1);
+
+    if (currentPit === NUM_PITS && player !== currentPlayer) {
+      // Skip the opponent's store
+      currentPit = (currentPit + 1) % (2 * NUM_PITS + 1);
+    }
+
     if (currentPit === NUM_PITS) {
-      if (player === currentPlayer) {
-        const currentStoreIndex = player - 1;
-        stores[currentStoreIndex].innerHTML = parseInt(stores[currentStoreIndex].innerHTML) + 1;
-        stonesInHand--;
-        if (stonesInHand === 0) {
-          extraTurn = true;
-        }
+      const currentStoreIndex = player - 1;
+      stores[currentStoreIndex].textContent = parseInt(stores[currentStoreIndex].textContent) + 1;
+      stonesInHand--;
+
+      if (stonesInHand === 0) {
+        extraTurn = true;
       }
     } else {
       const currentRow = Math.floor(currentPit / NUM_PITS);
@@ -73,21 +77,6 @@ if (isAnimating) return;
       board[currentRow][currentPitIndex]++;
       stonesInHand--;
       renderBoard();
-
-      if (stonesInHand === 0 && currentPit === (player * NUM_PITS) % (2 * NUM_PITS)) {
-        extraTurn = true;
-      }
-
-      if (stonesInHand === 0 && currentRow === player - 1 && board[currentRow][currentPitIndex] === 1) {
-        const opponentPit = NUM_PITS - currentPitIndex - 1;
-        const capturedStones = board[1 - currentRow][opponentPit];
-        board[1 - currentRow][opponentPit] = 0;
-
-        const store = stores[player - 1];
-        const storeStones = parseInt(store.innerHTML);
-        store.innerHTML = storeSeeds + capturedStones + 1;
-        board[currentRow][currentPitIndex] = 0;
-      }
     }
   }
 
@@ -103,27 +92,27 @@ function renderBoard() {
   pits.forEach((pit, index) => {
     const player = parseInt(pit.dataset.player);
     const pitIndex = parseInt(pit.dataset.pit);
-    pit.innerHTML = board[player - 1][pitIndex];
+    pit.textContent = board[player - 1][pitIndex];
   });
 }
 
 function renderMessage() {
-  turnMsg.innerHTML = `Player ${currentPlayer}'s Turn`;
+  turnMsg.textContent = `Player ${currentPlayer}'s Turn`;
 }
 
 function isGameOver() {
-  const storeStones = stores.map(store => parseInt(store.innerHTML));
-  return board.every(playerPits => playerPits.every(pit => pit === 0)) || storeStones.some(stones => stones > 24);
+  const storeSeeds = stores.map(store => parseInt(store.textContent));
+  return board.every(playerPits => playerPits.every(pit => pit === 0)) || storeSeeds.some(seeds => seeds > 24);
 }
 
 function endGame() {
-  const storeStones = stores.map(store => parseInt(store.innerHTML));
-  if (storeStones[0] > storeSeeds[1]) {
+  const storeSeeds = stores.map(store => parseInt(store.textContent));
+  if (storeSeeds[0] > storeSeeds[1]) {
     winner = 1;
-  } else if (storeStones[0] < storeStones[1]) {
+  } else if (storeSeeds[0] < storeSeeds[1]) {
     winner = 2;
   } else {
     winner = "Tie";
   }
-  turnMsg.innerHTML = `Game Over! ${winner === "Tie" ? "It's a Tie!" : "Player " + winner + " Wins!"}`;
+  turnMsg.textContent = `Game Over! ${winner === "Tie" ? "It's a Tie!" : "Player " + winner + " Wins!"}`;
 }
