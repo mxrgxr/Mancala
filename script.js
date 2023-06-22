@@ -1,114 +1,125 @@
-// when player clicks slot
-    // 1. empty clicked slot
-    // 2. loop move 1 space to right drop 1 token as long as last move was in slot with more tokens than 1
-        // 2a. only place in own store, if passing over opponent store skip
-    // 3. possible last moves
-        // 3a. if player runs out of tokens after own store, player gains new turn
-        // 3b. if player runs out of tokens in opponent side, switch turns
-        // 3c. if player runs out of tokens in own side && opponent has tokens directly across, collect opponent tokens && last token player placed
-        // 3d. if player runs out of tokens in own side && opponent doesn't have tokens directly across, switch turns
-// if any tokens left in 12 playable slots, game is in progress
-    // 1. when no tokens in playable slots, check winner
-        // 1a. check winner function counts tokens in each player's stores
-        // 1b. player with > tokens wins
-        // 1c. enable reset button functionality
-// listen for player click on reset button to reset board and rerun the game
+// Constants
+const NUM_PITS = 6;
+const INITIAL_SEEDS = 4;
+const DELAY_MS = 1000;
 
-/*----- constants -----*/
-const PLAYERS = {
-    '0': 'none',
-    '1': 'Player 1',
-    '-1': 'Player 2'
-}
-
-/*----- state variables -----*/
-let turn;
+// State variables
+let currentPlayer;
 let board;
 let winner;
 
-/*----- cached elements  -----*/
-const turnMessage = document.querySelector('h1');
-const resetBtn = document.querySelector('button');
-const player1Pits = Array.from(document.getElementById('player1').querySelectorAll('.pit'));
-const player2Pits = Array.from(document.getElementById('player2').querySelectorAll('.pit'));
-const player1Store = document.getElementById('player1-store');
-const player2Store = document.getElementById('player2-store');
+// Cached HTML elements
+const pits = document.querySelectorAll(".pit");
+const stores = Array.from(document.querySelectorAll(".store"));
+const turnMsg = document.querySelector("h1");
+const resetBtn = document.querySelector("button");
 
-/*----- event listeners -----*/
-player1Pits.forEach(pit => {
-    pit.addEventListener('click', handlePlayerChoice);
-});
-player2Pits.forEach(pit => {
-    pit.addEventListener('click', handlePlayerChoice);
-});
-resetBtn.addEventListener('click', initialize);
+// Event listeners
+pits.forEach(pit => pit.addEventListener("click", handlePlayerChoice));
+resetBtn.addEventListener("click", initialize);
 
-/*----- functions -----*/
+// Initialize the game
 initialize();
 
-function initialize(){
-    board = [
-        [4, 4, 4, 4, 4, 4], //player 1 pits
-        [4, 4, 4, 4, 4, 4], //player 2 pits
-        [0, 0] //player stores
-    ];
-    turn = 1;
-    winner = null;
-    render();
+function initialize() {
+  currentPlayer = 1;
+  winner = null;
+  board = [
+    [4, 4, 4, 4, 4, 4], // PLAYER 1 PITS
+    [4, 4, 4, 4, 4, 4], // PLAYER 2 PITS
+    [0, 0], // BOTH PLAYER STORES ARE INITIALLY EMPTY
+  ];
+  stores.forEach(store => (store.textContent = "0"));
+  render();
 }
 
-function render(){
-    renderBoard();
-    renderMessage();
+function render() {
+  renderBoard();
+  renderMessage();
 }
 
-function renderBoard(){
-    player1Pits.forEach((pit, i) => {
-        pit.innerHTML = board[0][i];
-    });
-    player2Pits.forEach((pit, i) => {
-        pit.innerHTML = board[1][i];
-    });
-    player1Store.innerHTML = board[2][0];
-    player2Store.innerHTML = board[2][1];
-}
+async function handlePlayerChoice(event) {
 
-function renderMessage(){
+  const pit = event.target;
+  const player = parseInt(pit.dataset.player);
+  const pitIndex = parseInt(pit.dataset.pit) ;
 
-}
+  if (player !== currentPlayer) return;
 
-function handlePlayerChoice(event){
-    const selectedPit = event.target;
-    const player = selectedPit.getAttribute('data-player');
-    const pitIdx = selectedPit.getAttribute('data-pit');
-    board[player][pitIdx] = 0;
-    moveStones();
-    checkLastMove();
-    winner = getWinner();
-    render();
-}
+  let stonesInHand = board[player - 1][pitIndex];
+  board[player - 1][pitIndex] = 0;
+  renderBoard();
 
-function moveStones(){
-    const playerPits = board[turn === 1 ? 0 : 1];
-    const currentPlayerStore = board[2][turn === 1 ? 0 : 1];
-
-    let movingStones = playerPits[pitIdx];
-    let currentPitIdx = pitIdx;
-
-    while (movingStones > 0) {
-        currentPitIdx = (currentPitIdx + 1) % playerPits.length;
-        if (currentPitIdx === (turn === 1 ? player2Store : player1Store)) {
-            currentPitIdx = (currentPitIdx + 1) % playerPits.length;
+  let currentPit = pitIndex;
+  let extraTurn = false;
+  while (stonesInHand > 0) {
+    currentPit = (currentPit + 1) % (2 * NUM_PITS);
+    if (currentPit === NUM_PITS) {
+      if (player === currentPlayer) {
+        const currentStoreIndex = player - 1;
+        stores[currentStoreIndex].textContent = parseInt(stores[currentStoreIndex].textContent) + 1;
+        stonesInHand--;
+        if (stonesInHand === 0) {
+          extraTurn = true;
         }
-        playerPits[currentPitIdx] += 1;
-        movingStones--;
+      }
+    } else {
+      const currentRow = Math.floor(currentPit / NUM_PITS);
+      const currentPitIndex = currentPit % NUM_PITS;
+      board[currentRow][currentPitIndex]++;
+      stonesInHand--;
+      renderBoard();
+
+      if (stones === 0 && currentPit === (player * NUM_PITS) % (2 * NUM_PITS)) {
+        extraTurn = true;
+      }
+
+      if (stonesInHand === 0 && currentRow === player - 1 && board[currentRow][currentPitIndex] === 1) {
+        const opponentPit = NUM_PITS - currentPitIndex - 1;
+        const capturedStones = board[1 - currentRow][opponentPit];
+        board[1 - currentRow][opponentPit] = 0;
+
+        const store = stores[player - 1];
+        const storeStones = parseInt(store.textContent);
+        store.textContent = storeSeeds + capturedStones + 1;
+        board[currentRow][currentPitIndex] = 0;
+      }
     }
+  }
+
+  if (isGameOver()) {
+    endGame();
+  } else if (!extraTurn) {
+    currentPlayer = 3 - currentPlayer;
+    renderMessage();
+  }
 }
 
-function checkLastMove(){
-
+function renderBoard() {
+  pits.forEach((pit, index) => {
+    const player = parseInt(pit.dataset.player);
+    const pitIndex = parseInt(pit.dataset.pit);
+    pit.innerHTML = board[player - 1][pitIndex];
+  });
 }
 
-function getWinner(){
-    
+function renderMessage() {
+  turnIndicator.textContent = `Player ${currentPlayer}'s Turn`;
+}
+
+function isGameOver() {
+  const storeStones = stores.map(store => parseInt(store.textContent));
+  return board.every(playerPits => playerPits.every(pit => pit === 0)) || storeStones.some(stones => stones > 24);
+}
+
+function endGame() {
+  const storeStones = stores.map(store => parseInt(store.textContent));
+  if (storeStones[0] > storeSeeds[1]) {
+    winner = 1;
+  } else if (storeStones[0] < storeStones[1]) {
+    winner = 2;
+  } else {
+    winner = "Tie";
+  }
+  turnIndicator.textContent = `Game Over! ${winner === "Tie" ? "It's a Tie!" : "Player " + winner + " Wins!"}`;
 }
