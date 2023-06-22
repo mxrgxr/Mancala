@@ -56,11 +56,9 @@ async function handlePlayerChoice(event) {
   isAnimating = true;
   while (stonesInHand > 0) {
     await new Promise(resolve => setTimeout(resolve, DELAY_MS));
-    currentPit = (currentPit + 1) % (2 * NUM_PITS + 1);
-
-    if (currentPit === NUM_PITS && player !== currentPlayer) {
-      // Skip the opponent's store
-      currentPit = (currentPit + 1) % (2 * NUM_PITS + 1);
+    currentPit = (currentPit + 1);
+    if (currentPit === board && player !== currentPlayer) {
+      currentPit = (currentPit + 1);
     }
 
     if (currentPit === NUM_PITS) {
@@ -73,7 +71,8 @@ async function handlePlayerChoice(event) {
       }
     } else {
       const currentRow = Math.floor(currentPit / NUM_PITS);
-      const currentPitIndex = currentPit % NUM_PITS;
+      const currentPitIndex = currentRow === 0 ? currentPit % NUM_PITS : (currentPit % NUM_PITS) - 1;
+      console.log(currentRow)
       board[currentRow][currentPitIndex]++;
       stonesInHand--;
       renderBoard();
@@ -101,15 +100,15 @@ function renderMessage() {
 }
 
 function isGameOver() {
-  const storeSeeds = stores.map(store => parseInt(store.textContent));
-  return board.every(playerPits => playerPits.every(pit => pit === 0)) || storeSeeds.some(seeds => seeds > 24);
+  const storeStones = stores.map(store => parseInt(store.textContent));
+  return board.every(playerPits => playerPits.every(pit => pit === 0)) || storeStones.some(stones => stones > 24);
 }
 
 function endGame() {
-  const storeSeeds = stores.map(store => parseInt(store.textContent));
-  if (storeSeeds[0] > storeSeeds[1]) {
+  const storeStones = stores.map(store => parseInt(store.textContent));
+  if (storeStones[0] > storeStones[1]) {
     winner = 1;
-  } else if (storeSeeds[0] < storeSeeds[1]) {
+  } else if (storeStones[0] < storeStones[1]) {
     winner = 2;
   } else {
     winner = "Tie";
