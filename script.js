@@ -29,7 +29,7 @@ function initialize() {
     [4, 4, 4, 4, 4, 4], // PLAYER 2 PITS
     [0, 0], // BOTH PLAYER STORES ARE INITIALLY EMPTY
   ];
-  stores.forEach(store => (store.textContent = "0"));
+  stores.forEach(store => (store.innerHTML = "0"));
   render();
 }
 
@@ -39,7 +39,7 @@ function render() {
 }
 
 async function handlePlayerChoice(event) {
-
+if (isAnimating) return;
   const pit = event.target;
   const player = parseInt(pit.dataset.player);
   const pitIndex = parseInt(pit.dataset.pit) ;
@@ -52,12 +52,13 @@ async function handlePlayerChoice(event) {
 
   let currentPit = pitIndex;
   let extraTurn = false;
+  isAnimating = true;
   while (stonesInHand > 0) {
     currentPit = (currentPit + 1) % (2 * NUM_PITS);
     if (currentPit === NUM_PITS) {
       if (player === currentPlayer) {
         const currentStoreIndex = player - 1;
-        stores[currentStoreIndex].textContent = parseInt(stores[currentStoreIndex].textContent) + 1;
+        stores[currentStoreIndex].innerHTML = parseInt(stores[currentStoreIndex].innerHTML) + 1;
         stonesInHand--;
         if (stonesInHand === 0) {
           extraTurn = true;
@@ -70,7 +71,7 @@ async function handlePlayerChoice(event) {
       stonesInHand--;
       renderBoard();
 
-      if (stones === 0 && currentPit === (player * NUM_PITS) % (2 * NUM_PITS)) {
+      if (stonesInHand === 0 && currentPit === (player * NUM_PITS) % (2 * NUM_PITS)) {
         extraTurn = true;
       }
 
@@ -80,8 +81,8 @@ async function handlePlayerChoice(event) {
         board[1 - currentRow][opponentPit] = 0;
 
         const store = stores[player - 1];
-        const storeStones = parseInt(store.textContent);
-        store.textContent = storeSeeds + capturedStones + 1;
+        const storeStones = parseInt(store.innerHTML);
+        store.innerHTML = storeSeeds + capturedStones + 1;
         board[currentRow][currentPitIndex] = 0;
       }
     }
@@ -104,16 +105,16 @@ function renderBoard() {
 }
 
 function renderMessage() {
-  turnIndicator.textContent = `Player ${currentPlayer}'s Turn`;
+  turnIndicator.innerHTML = `Player ${currentPlayer}'s Turn`;
 }
 
 function isGameOver() {
-  const storeStones = stores.map(store => parseInt(store.textContent));
+  const storeStones = stores.map(store => parseInt(store.innerHTML));
   return board.every(playerPits => playerPits.every(pit => pit === 0)) || storeStones.some(stones => stones > 24);
 }
 
 function endGame() {
-  const storeStones = stores.map(store => parseInt(store.textContent));
+  const storeStones = stores.map(store => parseInt(store.innerHTML));
   if (storeStones[0] > storeSeeds[1]) {
     winner = 1;
   } else if (storeStones[0] < storeStones[1]) {
@@ -121,5 +122,5 @@ function endGame() {
   } else {
     winner = "Tie";
   }
-  turnIndicator.textContent = `Game Over! ${winner === "Tie" ? "It's a Tie!" : "Player " + winner + " Wins!"}`;
+  turnIndicator.innerHTML = `Game Over! ${winner === "Tie" ? "It's a Tie!" : "Player " + winner + " Wins!"}`;
 }
