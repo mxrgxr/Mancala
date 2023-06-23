@@ -1,72 +1,72 @@
 * {
-    box-sizing: border-box;
-    margin: 0;
-    padding: 0;
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
 }
 
 body {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 100vh;
 }
 
 header {
-    font-size: 10vw;
+  font-size: 10vw;
 }
 
 h1 {
-    font-size: 5vw;
+  font-size: 5vw;
 }
 
 .board {
-    width: 80vw;
-    height: 40vw;
-    background-color: #4C261C;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 20px;
-  }
-  
-  .player {
-    display: flex;
-    flex-direction: column;
-  }
-  
-  .row {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-  }
+  width: 80vw;
+  height: 40vw;
+  background-color: #4C261C;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 20px;
+}
 
-  .pit {
-    background-color: white;
-    border-radius: 50%;
-    width: 8vw;
-    height: 8vw;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    font-size: 2vw;
-    color: black;
-    margin: 1vw;
-  }
-  
-  .store {
-    background-color: yellow;
-    width: 16vw;
-    height: 32vw;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    font-size: 4vw;
-    color: black;
-    margin: 1vw;
-  }
+.player {
+  display: flex;
+  flex-direction: column;
+}
+
+.row {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.pit {
+  background-color: white;
+  border-radius: 50%;
+  width: 8vw;
+  height: 8vw;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 2vw;
+  color: black;
+  margin: 1vw;
+}
+
+.store {
+  background-color: yellow;
+  width: 16vw;
+  height: 32vw;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 4vw;
+  color: black;
+  margin: 1vw;
+}
 
 button {
-    font-size: 2vw;
-    padding: 1vw 2vw;
+  font-size: 2vw;
+  padding: 1vw 2vw;
 }

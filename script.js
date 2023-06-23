@@ -26,9 +26,8 @@ function initialize() {
   currentPlayer = 1;
   winner = null;
   board = [
-    [4, 4, 4, 4, 4, 4], // PLAYER 1 PITS
-    [4, 4, 4, 4, 4, 4], // PLAYER 2 PITS
-    [0, 0], // BOTH PLAYER STORES ARE INITIALLY EMPTY
+    4, 4, 4, 4, 4, 4, 0, // PLAYER 1 PITS AND STORE
+    4, 4, 4, 4, 4, 4, 0, // PLAYER 2 PITS AND STORE
   ];
   stores.forEach(store => (store.textContent = "0"));
   render();
@@ -39,39 +38,39 @@ function render() {
   renderMessage();
 }
 async function handlePlayerChoice(event) {
-
   // stops program from running if stone distribution in progress
-  if (isAnimating) {
-    return;
-  }
+  if (isAnimating) return;
   // obtain data related to clicked pit
   const pit = event.target;
-  const player = parseInt(pit.dataset.player);
   const pitIndex = parseInt(pit.dataset.pit);
+  const player = pitIndex < NUM_PITS + 1 ? 1 : 2;
+  console.log(player)
   // stops opponent from clicking during player's turn
-  if (player !== currentPlayer) {
-    return;
-  }
+  if (player !== currentPlayer)return;
   // "pick up" stones and update board array
-  let stonesInHand = board[player - 1][pitIndex];
-  board[player - 1][pitIndex] = 0;
+  let stonesInHand = board[pitIndex];
+  board[pitIndex] = 0;
   renderBoard();
   // initialize currentPit variable
   let currentPit = pitIndex;
+  console.log(currentPit);
   let extraTurn = false;
   // stone distribution in progress
   isAnimating = true;
   // while player has stones in hand continue
-  while (stonesInHand > 0) {
+    while (stonesInHand > 0) {
     await new Promise(resolve => setTimeout(resolve, DELAY_MS));
     // move to next pit
-    currentPit = (currentPit + 1);
+    currentPit = (currentPit + 1) % (2 * (NUM_PITS + 1));
+    if ((currentPit === NUM_PITS && player === 2) || (currentPit === 2 * (NUM_PITS + 1) && player === 1)) {
+      currentPit = (currentPit + 1) % (2 * (NUM_PITS + 1));
+    }
     // check if store belongs to player otherwise
     if ((currentPit === NUM_PITS && player === 2) || (currentPit === NUM_PITS * 2 + 1 && player === 1)) {
       // skip by adding one to currentPit
       currentPit = (currentPit + 1);
     }
-    // if current pit is player tore
+    // if current pit is player store
     if (currentPit === NUM_PITS) {
       // find index of current player's store
       const currentStoreIndex = currentPlayer - 1;
@@ -89,15 +88,15 @@ async function handlePlayerChoice(event) {
       // if in row 1, pit index can be found by using remainder of currentPit/6 or
       // if in row 2, subtract 1
       const currentPitIndex = currentRow === 0 ? currentPit % NUM_PITS : (currentPit % NUM_PITS) - 1;
-      console.log(event.target)
       // increase stones in current pit
-      board[currentRow][currentPitIndex]++;
-      // decrease stones to play
+      board[currentPit]++;
+      console.log(board[currentRow]);
+      console.log(board[currentPitIndex]);
       stonesInHand--;
       renderBoard();
     }
-    isAnimating = false;
   }
+  isAnimating = false;
 
   if (isGameOver()) {
     endGame();
@@ -109,12 +108,12 @@ async function handlePlayerChoice(event) {
 
 function renderBoard() {
   pits.forEach((pit, index) => {
-    const player = parseInt(pit.dataset.player);
     const pitIndex = parseInt(pit.dataset.pit);
-    pit.textContent = board[player - 1][pitIndex];
+    if (board[pitIndex] !== undefined) {
+      pit.textContent = board[pitIndex];
+    }
   });
 }
-
 function renderMessage() {
   turnMsg.textContent = `Player ${currentPlayer}'s Turn`;
 }
