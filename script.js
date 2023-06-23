@@ -74,7 +74,7 @@ async function handlePlayerChoice(event) {
       console.log("Line 74 check store ownership currentPit:", currentPit)
     }
     // if current pit is player store
-    if ((currentPit === NUM_PITS && currentPlayer === 1) || (currentPit === NUM_PITS*2+1 && currentPlayer === 2)) {
+    if ((currentPit === NUM_PITS && currentPlayer === 1) || (currentPit === NUM_PITS * 2 + 1 && currentPlayer === 2) && stonesInHand === 1) {
       // find index of current player's store
       const currentStoreIndex = currentPlayer - 1;
       console.log("Line 80 current player store:", currentStoreIndex)
