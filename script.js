@@ -80,6 +80,7 @@ async function handlePlayerChoice(event) {
       console.log("Line 80 current player store:", currentStoreIndex)
       // access and add stone to player store
       stores[currentStoreIndex].textContent = parseInt(stores[currentStoreIndex].textContent) + 1;
+      board[currentPit]++;
       console.log(stores[currentStoreIndex]);
       console.log("updated board array", board)
       // decrease remaining stones to play
@@ -99,6 +100,7 @@ async function handlePlayerChoice(event) {
       console.log("updated stones in currentPit:", board[currentPit])
       stonesInHand--;
       renderBoard();
+      console.log("updated board array", board)
     }
   }
   isAnimating = false;
@@ -117,6 +119,7 @@ function renderBoard() {
     if (board[pitIndex] !== undefined) {
       pit.textContent = board[pitIndex];
     }
+    console.log(pitIndex)
   });
 }
 function renderMessage() {
