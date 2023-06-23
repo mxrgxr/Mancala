@@ -44,17 +44,14 @@ async function handlePlayerChoice(event) {
   const pit = event.target;
   const pitIndex = parseInt(pit.dataset.pit);
   const player = pitIndex < NUM_PITS + 1 ? 1 : 2;
-  console.log("Line 47 pit index:", pitIndex)
   // stops opponent from clicking during player's turn
   if (player !== currentPlayer)return;
   // "pick up" stones and update board array
   let stonesInHand = board[pitIndex];
-  console.log("Line 52 pit index:", stonesInHand)
   board[pitIndex] = 0;
   renderBoard();
   // initialize currentPit variable
   let currentPit = pitIndex;
-  console.log("Line 57 currentPit", currentPit)
   let extraTurn = false;
   // stone distribution in progress
   isAnimating = true;
@@ -63,7 +60,6 @@ async function handlePlayerChoice(event) {
     await new Promise(resolve => setTimeout(resolve, DELAY_MS));
     // move to next pit
     currentPit = (currentPit + 1) % (2 * (NUM_PITS + 1));
-    console.log("Line 65 after move curentPit:", currentPit)
     if ((currentPit === NUM_PITS && player === 2) || (currentPit === 2 * (NUM_PITS + 1) && player === 1)) {
       currentPit = (currentPit + 1) % (2 * (NUM_PITS + 1));
     }
@@ -71,18 +67,14 @@ async function handlePlayerChoice(event) {
     if ((currentPit === NUM_PITS && player === 2) || (currentPit === NUM_PITS * 2 + 1 && player === 1)) {
       // skip by adding one to currentPit
       currentPit = (currentPit + 1);
-      console.log("Line 74 check store ownership currentPit:", currentPit)
     }
     // if current pit is player store
     if ((currentPit === NUM_PITS && currentPlayer === 1) || (currentPit === NUM_PITS * 2 + 1 && currentPlayer === 2) && stonesInHand === 1) {
       // find index of current player's store
       const currentStoreIndex = currentPlayer - 1;
-      console.log("Line 80 current player store:", currentStoreIndex)
       // access and add stone to player store
       stores[currentStoreIndex].textContent = parseInt(stores[currentStoreIndex].textContent) + 1;
       board[currentPit]++;
-      console.log(stores[currentStoreIndex]);
-      console.log("updated board array", board)
       // decrease remaining stones to play
       stonesInHand--;
       // check if player ran out of stones in own store to grant another turn
@@ -97,10 +89,8 @@ async function handlePlayerChoice(event) {
       const currentPitIndex = currentRow === 0 ? currentPit % NUM_PITS : (currentPit % NUM_PITS) - 1;
       // increase stones in current pit
       board[currentPit]++;
-      console.log("updated stones in currentPit:", board[currentPit])
       stonesInHand--;
       renderBoard();
-      console.log("updated board array", board)
     }
   }
   isAnimating = false;
@@ -119,7 +109,6 @@ function renderBoard() {
     if (board[pitIndex] !== undefined) {
       pit.textContent = board[pitIndex];
     }
-    console.log(pitIndex)
   });
 }
 function renderMessage() {
