@@ -1,3 +1,5 @@
+//LATEST PUSH
+
 // Constants
 const NUM_PITS = 6;
 const INITIAL_SEEDS = 4;
@@ -79,11 +81,6 @@ async function handlePlayerChoice(event) {
         extraTurn = true;
       }
     } else {
-      // find row (0 or 1) by dividing current pit by 6 and rounding
-      const currentRow = Math.floor(currentPit / NUM_PITS);
-      // if in row 1, pit index can be found by using remainder of currentPit/6 or
-      // if in row 2, subtract 1
-      const currentPitIndex = currentRow === 0 ? currentPit % NUM_PITS : (currentPit % NUM_PITS) - 1;
       // increase stones in current pit
       board[currentPit]++;
       stonesInHand--;
