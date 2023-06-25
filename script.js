@@ -1,9 +1,9 @@
-//LATEST PUSH
-
 // Constants
 const NUM_PITS = 6;
 const INITIAL_SEEDS = 4;
 const DELAY_MS = 500;
+const P1_STORE = 6;
+const P2_STORE = 13;
 
 // State variables
 let currentPlayer;
@@ -63,12 +63,12 @@ async function handlePlayerChoice(event) {
     // move to next pit
     currentPit = (currentPit + 1) % (2 * (NUM_PITS + 1));
     // check if store belongs to player otherwise
-    if ((currentPit === NUM_PITS && player === 2) || (currentPit === NUM_PITS * 2 + 1 && player === 1)) {
+    if ((currentPit === P1_STORE && player === 2) || (currentPit === P2_STORE && player === 1)) {
       // skip by adding one to currentPit
       currentPit = (currentPit + 1);
     }
     // if current pit is player store
-    if ((currentPit === NUM_PITS && currentPlayer === 1) || (currentPit === NUM_PITS*2+1 && currentPlayer === 2)) {
+    if ((currentPit === P1_STORE && currentPlayer === 1) || (currentPit === P2_STORE && currentPlayer === 2)) {
       // find index of current player's store
       const currentStoreIndex = currentPlayer - 1;
       // access and add stone to player store
