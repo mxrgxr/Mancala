@@ -2,7 +2,6 @@
 
 ## Live link
 [Mancala](https://mxrgxr.github.io/Mancala/)
----
 
 ### Overview
 
