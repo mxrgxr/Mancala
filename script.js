@@ -73,7 +73,7 @@ async function handlePlayerChoice(event) {
       // find index of current player's store
       const currentStoreIndex = currentPlayer - 1;
       // access and add stone to player store
-      stores[currentStoreIndex].textContent = parseInt(stores[currentStoreIndex].textContent) ++;
+      stores[currentStoreIndex].textContent = parseInt(stores[currentStoreIndex].textContent) + 1;
       board[currentPit]++;
       // decrease remaining stones to play
       stonesInHand--;
