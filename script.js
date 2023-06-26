@@ -2,8 +2,8 @@
 const NUM_PITS = 6;
 const INITIAL_SEEDS = 4;
 const DELAY_MS = 500;
-const P1_STORE = 6;
-const P2_STORE = 13;
+const P1_STORE = NUM_PITS;
+const P2_STORE = (NUM_PITS*2)+1;
 
 // State variables
 let currentPlayer;
@@ -98,7 +98,7 @@ async function handlePlayerChoice(event) {
 }
 
 function renderBoard() {
-  pits.forEach((pit, index) => {
+  pits.forEach((pit) => {
     const pitIndex = parseInt(pit.dataset.pit);
     if (board[pitIndex] !== undefined) {
       pit.textContent = board[pitIndex];
