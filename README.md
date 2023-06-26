@@ -4,7 +4,7 @@
 [Mancala](https://mxrgxr.github.io/Mancala/)
 ---
 
-**Overview**
+### Overview
 
 This project is a browser-based implementation of the classic board game Mancala. The objective of the game is to collect as many stones in your store as possible. The player with the most stones in their store at the end of the game wins.
 ---
@@ -21,11 +21,9 @@ This project is a browser-based implementation of the classic board game Mancala
 
 ### Wireframe
 <img src="https://i.imgur.com/2Jzs3ys.png" alt="">
----
 
 ### Project Preview
 <img src="https://i.imgur.com/J7W2zav.png" alt="">
----
 
 ### Technologies Used
 ![HTML Badge](https://img.shields.io/badge/HTML5-E34F26?style=for-the-badge&logo=html5&logoColor=white)
