@@ -101,10 +101,10 @@ The code is organized into three main files:
 ---
 
 ### Stretch Goals
-- [] Implement continuous stone distribution
-- [] Implement Mancala capture logic
-- [] Visual representation of stones
-- [] Animate gameplay as player progresses around the board
+- [ ] Implement continuous stone distribution
+- [ ] Implement Mancala capture logic
+- [ ] Visual representation of stones
+- [ ] Animate gameplay as player progresses around the board
 ---
 
 #### Resources Used
