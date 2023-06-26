@@ -59,6 +59,7 @@ async function handlePlayerChoice(event) {
   isAnimating = true;
   // while player has stones in hand continue
     while (stonesInHand > 0) {
+      console.log(extraTurn);
     await new Promise(resolve => setTimeout(resolve, DELAY_MS));
     // move to next pit
     currentPit = (currentPit + 1) % (2 * (NUM_PITS + 1));

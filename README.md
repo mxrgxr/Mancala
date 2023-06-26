@@ -4,7 +4,7 @@
 [Mancala](https://mxrgxr.github.io/Mancala/)
 ---
 
-### Overview
+**Overview**
 
 This project is a browser-based implementation of the classic board game Mancala. The objective of the game is to collect as many stones in your store as possible. The player with the most stones in their store at the end of the game wins.
 ---
@@ -57,6 +57,7 @@ The code is organized into three main files:
 - `style.css`: Defines the styling and layout of the game board, including fonts, colors, and background images.
 - `script.js`: Contains the JavaScript logic for the game, including state variables, event listeners, and game functions.
 ---
+
 #### Key Functions
 
 - `initialize()`: Sets up the initial game state, including the board and current player.
@@ -65,7 +66,8 @@ The code is organized into three main files:
 - `isGameOver()`: Checks if the game is over based on the number of seeds in each player's store.
 - `endGame()`: Determines the winner and displays the game over message.
 
-## Code Preview
+### Code Preview
+
 ```js
   // while player has stones in hand continue
     while (stonesInHand > 0) {
@@ -98,12 +100,14 @@ The code is organized into three main files:
     }
   }
 ```
+---
 
 ### Stretch Goals
 - [] Implement continuous stone distribution
 - [] Implement Mancala capture logic
 - [] Visual representation of stones
 - [] Animate gameplay as player progresses around the board
+---
 
 #### Resources Used
 [Fonts](https://johndavidmaza.gumroad.com/)
